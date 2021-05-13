@@ -44,17 +44,6 @@ def load_pickle():
     return data
 
 
-@st.cache
-def load_skins_json():
-    """Load the JSON with URLs to the skins' art.
-    This function exists so the data can be cached.
-    """
-    json_path = os.path.join("static", "data", "skins_info.json")
-    with open(json_path, "r") as f:
-        data = json.load(f)
-    return data
-
-
 # Reset all app caches
 # caching.clear_cache()
 # Load the necessary data and sort it by alphabetical order of names
@@ -121,6 +110,7 @@ bg_art_url = heroe_art_dict[background_art]
 
 # Create the image name string
 wallpaper_name = heroe_chosen + ".png"
+wallpaper_name = "Unknown.png" if ("???" in wallpaper_name) else wallpaper_name
 wallpaper_bg_path = custom_bg_path if custom_bg_img != None else ""
 
 # Generate the wallpaper
