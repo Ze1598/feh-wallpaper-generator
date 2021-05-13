@@ -15,7 +15,7 @@ st.markdown("""
 
 Create phone wallpapers for your favourite Fire Emblem heroes!
 
-If you're interested in the code, you can find it on my GitHub repository [here]().
+If you're interested in the code, you can find it on my GitHub repository [here](https://github.com/Ze1598/feh-wallpaper-generator).
 
 For feedback, feel free to reach out to me on Twitter [@ze1598](https://twitter.com/ze1598).
 """)
