@@ -5,6 +5,21 @@ from typing import List, Dict, Tuple
 import base64
 import streamlit as st
 
+def resize_img(img: Image.Image, factor: float) -> Image.Image:
+    """Resize an image.
+    """
+    # Make sure the image is in the default dimensions and is RGBA
+    img = img.convert("RGBA")
+
+    # Calculate new dimensions
+    img_dims = img.size
+    img_dims = [int(dim*factor) for dim in img_dims]
+
+    # Finally resize the image, keeping it RGBA
+    img = img.resize(img_dims).convert("RGBA")
+
+    return img
+
 
 def change_alpha(img: Image.Image, opacity: float) -> Image.Image:
     """Change the opacity of an image.
@@ -41,8 +56,8 @@ def calculate_foreground_coordinates(art: Image.Image, wip_img_dims: List[int]) 
     art_dims = art.size
     # The X/width is horizontally-aligned
     art_coords[0] = (wip_img_dims[0] - art_dims[0]) // 2
-    # The Y/height is bottom-aligned
-    art_coords[1] = wip_img_dims[1] - art_dims[1]
+    # The Y/height is slightly below center aligned
+    art_coords[1] = (wip_img_dims[1] - art_dims[1]) // 4 + (wip_img_dims[1] // 6)
 
     return art_coords
 
@@ -74,8 +89,8 @@ def prepare_loaded_bg_art(res, img_dimensions, alpha):
 
     # Change the image's opacity
     art = change_alpha(art, alpha)
-    # Resize the image
-    #art = resize_img(art, 1.05)
+    # Resize the image (shrink it by a ratio to make it fit in the wallpaper)
+    art = resize_img(art, 0.65)
     # Center the BG art horizontally
     art_coords = calculate_bg_coordinates(art, img_dimensions)
 
@@ -86,13 +101,12 @@ def prepare_loaded_art(res, img_dimensions, art_type: str):
     """Load the art after making a GET request to it, process it and calculate the coordinates at which to draw it.
     """
     # Load the art from the request and process it
-    # art = Image\
-    #     .open(BytesIO(res.content), mode="r")\
-    #     .resize((1024, 1024))\
-    #     .convert("RGBA")
     art = Image\
         .open(BytesIO(res.content), mode="r")\
         .convert("RGBA")
+
+    # Resize it (shrink it by a ratio to make it fit in the wallpaper)    
+    art = resize_img(art, 0.5)
 
     # Center the art if it's the only art used
     if art_type == "single":
