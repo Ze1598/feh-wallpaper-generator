@@ -1,4 +1,4 @@
-# feh-wallpaper-generator [![Open in Streamlit](https://share.streamlit.io/ze1598/feh-wallpaper-generator)
+# feh-wallpaper-generator [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/ze1598/feh-wallpaper-generator)
 [live app](https://share.streamlit.io/ze1598/feh-wallpaper-generator)
 
 A web app built with [Streamlit](https://www.streamlit.io/) in Python to create Arknights mobile wallpapers on the fly.
