@@ -81,17 +81,5 @@ def scrape_art():
     
 
 if __name__ == "__main__":
-    # scrape_units()
-    # scrape_art()
-
-    with open("unit_arts.pickle", "rb") as f:
-        unit_arts = pickle.load(f)
-    
-    #print(set([k.split(":")[0] for k in unit_arts.keys()]))
-    import numpy as np
-    import pandas as pd
-    print(np.unique(np.array([k.split(":")[0] for k in unit_arts.keys()])))
-    print(pd.DataFrame({
-        "heroe": list(unit_arts.keys()),
-        "arts": list(unit_arts.values())
-    }))
+    scrape_units()
+    scrape_art()
