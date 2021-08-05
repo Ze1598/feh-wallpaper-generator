@@ -16,7 +16,7 @@ def resize_img(img: Image.Image, factor: float) -> Image.Image:
     img_dims = [int(dim*factor) for dim in img_dims]
 
     # Finally resize the image, keeping it RGBA
-    img = img.resize(img_dims).convert("RGBA")
+    img = img.convert("RGBA").resize(img_dims)
 
     return img
 
