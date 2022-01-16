@@ -26,20 +26,20 @@ def load_pickle():
     """Load the main CSV of operator names, promotion images' URLs and theme colors.
     This function exists so the data can be cached.
     """
-    # Load pickle with heroe arts
+    # Load pickle with hero arts
     pickle_path = os.path.join("static", "data", "unit_arts.pickle")
     with open(pickle_path, "rb") as f:
         data = pickle.load(f)
 
-    # DF of heroe alt and their list of arts    
+    # DF of hero alt and their list of arts    
     data = pd.DataFrame({
-        "heroeAlt": list(data.keys()),
+        "heroAlt": list(data.keys()),
         "arts": list(data.values())
     })
-    # Column with the unique heroe that alt belongs to
-    data["heroe"] = data["heroeAlt"].map(lambda heroe_alt: heroe_alt.split(":")[0])
+    # Column with the unique hero that alt belongs to
+    data["hero"] = data["heroAlt"].map(lambda hero_alt: hero_alt.split(":")[0])
     # Sort the DF by alphabetical order of unique heroes
-    data.sort_values(by="heroe", inplace=True)
+    data.sort_values(by="hero", inplace=True)
 
     return data
 
@@ -50,42 +50,42 @@ def load_pickle():
 main_data = load_pickle()
 
 # Dropdown to filter by operator rank
-heroe_chosen = st.selectbox(
-    "Choose the heroe",
-    main_data["heroe"].unique().tolist()
+hero_chosen = st.selectbox(
+    "Choose the hero",
+    main_data["hero"].unique().tolist()
 )
 
-filtered_data = main_data.query(f"heroe == '{heroe_chosen}'")
+filtered_data = main_data.query(f"hero == '{hero_chosen}'")
 
-heroe_alt_chosen = st.selectbox(
-    "Choose the heroe alt",
-    filtered_data["heroeAlt"].tolist()
+hero_alt_chosen = st.selectbox(
+    "Choose the hero alt",
+    filtered_data["heroAlt"].tolist()
 )
 
-heroe_alt_arts = filtered_data.query(f'heroeAlt == "{heroe_alt_chosen}"').iloc[0]["arts"]
+hero_alt_arts = filtered_data.query(f'heroAlt == "{hero_alt_chosen}"').iloc[0]["arts"]
 # By default, the foreground art is the portrait art
-foreground_art = heroe_alt_arts[0]
+foreground_art = hero_alt_arts[0]
 # By default, the background art is the special art
-background_art = heroe_alt_arts[2]
+background_art = hero_alt_arts[2]
 
 art_titles = ["Portrait", "Attack", "Special", "Damage"]
-heroe_art_dict = dict()
-for i, title in enumerate(heroe_alt_arts):
+hero_art_dict = dict()
+for i, title in enumerate(hero_alt_arts):
     if i <= 3:
         art_title = art_titles[i]
-        heroe_art_dict[art_title] = heroe_alt_arts[i]
+        hero_art_dict[art_title] = hero_alt_arts[i]
     else:
         art_title = f"{art_titles[i-4]} (Resplendent)"
-        heroe_art_dict[art_title] = heroe_alt_arts[i]
+        hero_art_dict[art_title] = hero_alt_arts[i]
 
 # Choose the fore and background art individually
 foreground_art = st.selectbox(
     "Which art do you want in the front?",
-    list(heroe_art_dict.keys())
+    list(hero_art_dict.keys())
 )
 background_art = st.selectbox(
     "Which art do you want in the back?",
-    list(heroe_art_dict.keys())
+    list(hero_art_dict.keys())
 )
 
 # Upload a custom background image for the wallpaper
@@ -106,13 +106,14 @@ custom_op_color = st.beta_color_picker("Feel free to change the operator theme c
 
 
 # Get the url for fore and background art
-fg_art_url = heroe_art_dict[foreground_art]
-bg_art_url = heroe_art_dict[background_art]
+fg_art_url = hero_art_dict[foreground_art]
+bg_art_url = hero_art_dict[background_art]
 
 # Create the image name string
-wallpaper_name = heroe_chosen + ".png"
+wallpaper_name = hero_chosen + ".png"
 wallpaper_name = "Unknown.png" if ("???" in wallpaper_name) else wallpaper_name
 wallpaper_bg_path = custom_bg_path if custom_bg_img != None else ""
+
 
 # Generate the wallpaper
 wallpaper_gen.main(
