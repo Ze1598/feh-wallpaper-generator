@@ -45,7 +45,8 @@ def scrape_art():
         unit_urls = pickle.load(f)
     
 
-    #unit_urls = {"Hector": "https://feheroes.fandom.com/wiki/Hector:_General_of_Ostia"}
+    # unit_urls = {"Alm": "https://feheroes.fandom.com/wiki/Alm:_Hero_of_Prophecy"}
+    # unit_urls = {"Astram": "https://feheroes.fandom.com/wiki/Astram:_Midia%27s_Hero", "Alm": "https://feheroes.fandom.com/wiki/Alm:_Hero_of_Prophecy"}
 
     art_dict = dict()
     # Get art for each unit
@@ -65,9 +66,15 @@ def scrape_art():
         temp_urls = list()
         # In the div of art, look only for the anchors with art
         for art_anchor in art_divs.find_all("div")[0].find_all("a", class_="image"):
-            #print(art_anchor.img)
-            # Clean string to get the original art dimensions      
-            art_relative_url = art_anchor.img["src"].split(".webp")[0] + ".webp"
+            # print(art_anchor.img)
+            # Clean string to get the original art dimensions
+            # Characters with alts and/or resplendent alts will have the urls in the data-src attribute
+            # Others have it in the src attribute
+            try:
+                art_relative_url = art_anchor.img["data-src"].split(".webp")[0] + ".webp"
+            except:
+                art_relative_url = art_anchor.img["src"].split(".webp")[0] + ".webp"
+            # print(art_relative_url)
             temp_urls.append(art_relative_url)
         
         # Add this unit's arts list to the running dictionary
